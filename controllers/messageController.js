@@ -1,36 +1,36 @@
 const messages = require('../data/messages')
 
-function index(req, res){
+function index(req, res) {
     const filtered_messages = messages
-    if(req.query.is_read){
+    if (req.query.is_read) {
         filtered_messages = messages.filter(message => messages.is_read == req.query.is_read)
     }
 
-    res.json({
-        status: 200,
-        filtered_messages
-    })
+    res.status(200)
+        .json({
+            filtered_messages
+        })
 }
 
-function show(req, res){
+function show(req, res) {
     const messageId = parseInt(req.params.id)
     const message = messages.find(message => message.id === messageId)
 
-    if(!message){
-        res.json({
-            status: 404,
-            error: true,
-            message: "Message not found"
-        })
+    if (!message) {
+        res.status(404)
+            .json({
+                error: true,
+                message: "Message not found"
+            })
     }
 
-    res.json({
-        status: 200,
-        message
-    })
+    res.status(200)
+        .json({
+            message
+        })
 }
 
-function store(req, res){
+function store(req, res) {
     const newId = messages[messages.length - 1].id + 1
     const newMessage = {
         id: newId,
@@ -43,53 +43,52 @@ function store(req, res){
 
     messages.push(newMessage)
 
-    res.json({
-        status: 201,
-        newMessage
-    })
+    res.status(201)
+        .json({
+            newMessage
+        })
 }
 
-function update(req, res){
+function update(req, res) {
 
     const messageId = parseInt(req.params.id)
     const message = messages.find(message => message.id == messageId)
 
-    if(!message){
-        res.json({
-            status: 404,
-            error: true,
-            message: "Message not found"
-        })
+    if (!message) {
+        res.status(404)
+            .json({
+                error: true,
+                message: "Message not found"
+            })
     }
 
     message.is_read = true
 
-    res.json({
-        status: 204
-    })
+    res.status(204)
+        .json({
+            message
+        })
 }
 
-function modify(req, res){
+function modify(req, res) {
     res.send("partially update message")
 }
 
-function destroy(req, res){
+function destroy(req, res) {
     const messageId = parseInt(req.params.id)
     const message = messages.find(message => message.id == messageId)
 
-    if(!message){
-        res.json({
-            status:404,
-            error: true,
-            message: "message not found"
-        })
+    if (!message) {
+        res.status(404)
+            .json({
+                error: true,
+                message: "message not found"
+            })
     }
 
     messages.splice(messages.indexOf(message), 1)
 
-    res.json({
-        status: 204
-    })
+    res.status(204)
 }
 
 module.exports = {
